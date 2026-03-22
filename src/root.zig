@@ -3,6 +3,7 @@
 const std = @import("std");
 
 pub const pid_t = std.os.linux.pid_t;
+pub const SIGNAL = std.os.linux.SIG;
 
 const processesBaseSrc = @import("processes/base.zig");
 
