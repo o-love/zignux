@@ -4,36 +4,39 @@ const std = @import("std");
 
 pub const pid_t = std.os.linux.pid_t;
 
-const processesBase = @import("processes/base.zig");
+const processesBaseSrc = @import("processes/base.zig");
 
-pub const kill = processesBase.kill;
-pub const fork = processesBase.fork;
+pub const kill = processesBaseSrc.kill;
+pub const fork = processesBaseSrc.fork;
 
-const processesExecv = @import("processes/execv.zig");
+const processesExecvSrc = @import("processes/execv.zig");
 
-pub const execve = processesExecv.execve;
+pub const execve = processesExecvSrc.execve;
 
-const processesWaitPid = @import("processes/waitPid.zig");
+const processesWaitPidSrc = @import("processes/waitPid.zig");
 
-pub const waitpid = processesWaitPid.waitpid;
-pub const WaitPidResult = processesWaitPid.WaitPidResult;
-pub const WaitPidStatus = processesWaitPid.WaitPidStatus;
-pub const WaitPidError = processesWaitPid.WaitPidError;
+pub const waitpid = processesWaitPidSrc.waitpid;
+pub const WaitPidResult = processesWaitPidSrc.WaitPidResult;
+pub const WaitPidStatus = processesWaitPidSrc.WaitPidStatus;
+pub const WaitPidError = processesWaitPidSrc.WaitPidError;
 
-const errno = @import("errno.zig");
+const errnoSrc = @import("errno.zig");
 
-pub const LinuxError = errno.LinuxError;
-pub const toLinuxError = errno.toLinuxError;
+pub const LinuxError = errnoSrc.LinuxError;
+pub const toLinuxError = errnoSrc.toLinuxError;
 
+const filesSrc = @import("files.zig");
 
-const files = @import("files.zig");
+pub const close = filesSrc.close;
+pub const openat = filesSrc.openat;
 
-pub const close = files.close;
-pub const openat = files.openat;
+const pipesSrc = @import("pipes.zig");
+
+pub const pipe = pipesSrc.pipe;
+pub const PipeResult = pipesSrc.PipeResult;
 
 const ptraceSrc = @import("ptrace.zig");
 
-pub const ptrace = ptraceSrc.ptrace;
 pub const ptraceFuncs = ptraceSrc.ptraceFuncs;
 
 test {
