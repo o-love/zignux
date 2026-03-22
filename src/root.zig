@@ -11,7 +11,7 @@ pub const fork = processesBase.fork;
 
 const processesExecv = @import("processes/execv.zig");
 
-pub const execv = processesExecv.execve;
+pub const execve = processesExecv.execve;
 
 const processesWaitPid = @import("processes/waitPid.zig");
 
