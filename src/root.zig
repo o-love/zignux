@@ -31,6 +31,11 @@ const files = @import("files.zig");
 pub const close = files.close;
 pub const openat = files.openat;
 
+const ptraceSrc = @import("ptrace.zig");
+
+pub const ptrace = ptraceSrc.ptrace;
+pub const ptraceFuncs = ptraceSrc.ptraceFuncs;
+
 test {
     _ = @import("processes/base.zig");
     _ = @import("processes/execv.zig");
