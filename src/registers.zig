@@ -54,3 +54,24 @@ const x86_64_UserRegs = extern struct {
     fs: u64,
     gs: u64,
 };
+
+pub const RegisterType = enum {
+    General,
+    SubGeneral,
+    Float,
+    Debug,
+};
+
+pub const RegisterFormat = enum {
+    Uint,
+    DoubleFloat,
+    LongDouble,
+    Vector,
+};
+
+pub const RegisterCompilerDefinition = struct {
+    dwarf_id: i32,
+    name: []const u8,
+    r_type: type,
+    format: RegisterFormat,
+};
