@@ -69,4 +69,3 @@ test pipe {
 
     try testing.expectEqualStrings(resultString, printString);
 }
-

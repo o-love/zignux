@@ -11,7 +11,6 @@ pub const UserRegs = switch (native_arch) {
     else => @compileError("Zignux unsupported register architecture"),
 };
 
-
 const x86_64_UserFpRegs = extern struct {
     cwd: u16,
     swd: u16,

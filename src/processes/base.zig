@@ -6,7 +6,6 @@ const pid_t = zignux.pid_t;
 const LinuxError = zignux.LinuxError;
 const toLinuxError = zignux.toLinuxError;
 
-
 pub fn kill(pid: pid_t, signal: i32) LinuxError!void {
     const result = linux.kill(pid, signal);
 

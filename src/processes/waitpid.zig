@@ -22,7 +22,7 @@ pub const WaitPidStatus = union(enum) {
 };
 
 pub const WaitPidError = error{
-InvalidStatus,
+    InvalidStatus,
 } || LinuxError;
 
 fn mapWaitPid(status: u32) WaitPidError!WaitPidStatus {

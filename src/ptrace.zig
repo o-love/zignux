@@ -1,4 +1,3 @@
-
 const base = @import("ptrace/base.zig");
 
 pub const ptrace = base.ptrace;
