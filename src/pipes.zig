@@ -6,10 +6,11 @@ const LinuxError = zignux.LinuxError;
 const toLinuxError = zignux.toLinuxError;
 const fork = zignux.fork;
 const close = zignux.close;
+const File = std.fs.File;
 
 pub const PipeResult = struct {
-    reader: i32,
-    writer: i32,
+    reader: File,
+    writer: File,
 };
 
 pub fn pipe() LinuxError!PipeResult {
@@ -21,12 +22,12 @@ pub fn pipe() LinuxError!PipeResult {
     try toLinuxError(result);
 
     return .{
-        .reader = pipefd[0],
-        .writer = pipefd[1],
+        .reader = File{ .handle = pipefd[0] },
+        .writer = File{ .handle = pipefd[1] },
     };
 }
 
-test pipe {
+test "pipe across fork" {
     const testing = std.testing;
     const rerouteStdToNull = @import("test_utils.zig").rerouteStdToNull;
 
@@ -36,12 +37,13 @@ test pipe {
     const pid = try fork();
 
     if (pid == 0) {
-        try close(pipes.reader);
+        pipes.reader.close();
+
         rerouteStdToNull() catch {
             std.process.exit(1);
         };
 
-        const file = std.fs.File{ .handle = pipes.writer };
+        const file = pipes.writer;
 
         var buffer: [1024]u8 = undefined;
 
@@ -54,10 +56,11 @@ test pipe {
         linux.exit(0);
     }
 
-    try close(pipes.writer);
+    pipes.writer.close();
     _ = try zignux.waitpid(pid, 0);
 
-    const file = std.fs.File{ .handle = pipes.reader };
+    const file = pipes.reader;
+    defer file.close();
 
     var buffer: [1024]u8 = undefined;
 
