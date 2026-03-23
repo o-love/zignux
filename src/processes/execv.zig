@@ -16,7 +16,7 @@ pub fn execve(
 }
 
 test "execve fork and wait pipeline" {
-    const rerouteStdToNull = @import("../testUtils.zig").rerouteStdToNull;
+    const rerouteStdToNull = @import("../test_utils.zig").rerouteStdToNull;
 
     const path = "/bin/sh";
     const argv = [_:null]?[*:0]const u8{ "/bin/sh", "-c", "echo hello" };

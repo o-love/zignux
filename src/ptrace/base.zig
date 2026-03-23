@@ -7,7 +7,7 @@ const pid_t = zignux.pid_t;
 const LinuxError = zignux.LinuxError;
 const toLinuxError = zignux.toLinuxError;
 
-const msgs = @import("../errnoMsgs.zig");
+const msgs = @import("../msgs.zig");
 
 pub fn ptrace(
     req: u32,

@@ -14,7 +14,7 @@ const processesExecvSrc = @import("processes/execv.zig");
 
 pub const execve = processesExecvSrc.execve;
 
-const processesWaitPidSrc = @import("processes/waitPid.zig");
+const processesWaitPidSrc = @import("processes/waitpid.zig");
 
 pub const waitpid = processesWaitPidSrc.waitpid;
 pub const WaitPidResult = processesWaitPidSrc.WaitPidResult;
@@ -43,15 +43,15 @@ pub const ptraceFuncs = ptraceSrc.ptraceFuncs;
 test {
     _ = @import("processes/base.zig");
     _ = @import("processes/execv.zig");
-    _ = @import("processes/waitPid.zig");
+    _ = @import("processes/waitpid.zig");
     _ = @import("ptrace/base.zig");
     _ = @import("ptrace/registers.zig");
     _ = @import("errno.zig");
-    _ = @import("errnoMsgs.zig");
+    _ = @import("msgs.zig");
     _ = @import("files.zig");
     _ = @import("log.zig");
     _ = @import("pipes.zig");
     _ = @import("ptrace.zig");
     _ = @import("registers.zig");
-    _ = @import("testUtils.zig");
+    _ = @import("test_utils.zig");
 }

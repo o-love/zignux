@@ -7,7 +7,7 @@ const LinuxError = zignux.LinuxError;
 const toLinuxError = zignux.toLinuxError;
 
 const log = @import("../log.zig");
-const msgs = @import("../errnoMsgs.zig");
+const msgs = @import("../msgs.zig");
 
 pub const WaitPidResult = struct {
     pid: pid_t,

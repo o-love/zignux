@@ -28,7 +28,7 @@ pub fn pipe() LinuxError!PipeResult {
 
 test pipe {
     const testing = std.testing;
-    const rerouteStdToNull = @import("testUtils.zig").rerouteStdToNull;
+    const rerouteStdToNull = @import("test_utils.zig").rerouteStdToNull;
 
     const printString = "Hey, how are you";
 
