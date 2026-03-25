@@ -14,26 +14,6 @@ pub const UserRegs = switch (native_arch) {
     else => @compileError("Zignux unsupported register architecture"),
 };
 
-const x64_UserFpRegs = extern struct {
-    cwd: u16,
-    swd: u16,
-    ftw: u16,
-    fop: u16,
-    rip: u64,
-    rdp: u64,
-    mxcsr: u32,
-    mxcr_mask: u32,
-    st_space: [32]u32,
-    xmm_space: [64]u32,
-    padding: [24]u32,
-};
-
-test "ensure x64 regs are comptime defined" {
-    comptime {
-        std.debug
-    }
-}
-
 const x64_UserRegsDefinition: []RegisterCompilerDefinition = .{
     x64GPR_64("orig_rax", -1),
     // rax
@@ -194,6 +174,31 @@ fn x64GPR_8L(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
         .format = .Uint,
     };
 }
+
+fn x64FPR(name: []const u8, system_name: []const u8, dwarf_id: dwarf_id_t) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = system_name,
+        .dwarf_id = dwarf_id,
+        .unit = u16,
+        .r_type = .Float,
+        .format = .Uint,
+    };
+}
+
+const x64_UserFpRegs = extern struct {
+    cwd: u16,
+    swd: u16,
+    ftw: u16,
+    fop: u16,
+    rip: u64,
+    rdp: u64,
+    mxcsr: u32,
+    mxcr_mask: u32,
+    st_space: [32]u32,
+    xmm_space: [64]u32,
+    padding: [24]u32,
+};
 
 const x64_UserRegs = extern struct {
     r15: u64,
