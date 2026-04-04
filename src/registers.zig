@@ -1,17 +1,192 @@
+const std = @import("std");
 const builtin = @import("builtin");
 const native_arch = builtin.cpu.arch;
 
+pub const dwarf_id_t = i32;
+
 pub const UserFpRegs = switch (native_arch) {
-    .x86_64 => x86_64_UserFpRegs,
+    .x86_64 => x64_UserFpRegs,
     else => @compileError("Zignux unsupported register architecture"),
 };
 
 pub const UserRegs = switch (native_arch) {
-    .x86_64 => x86_64_UserRegs,
+    .x86_64 => x64_UserRegs,
     else => @compileError("Zignux unsupported register architecture"),
 };
 
-const x86_64_UserFpRegs = extern struct {
+const x64_UserRegsDefinition: []RegisterCompilerDefinition = .{
+    x64GPR_64("orig_rax", -1),
+    // rax
+    x64GPR_64("rax", 0),
+    x64GPR_32("eax", "rax"),
+    x64GPR_16("ax", "rax"),
+    x64GPR_8H("ah", "rax"),
+    x64GPR_8L("al", "rax"),
+    // rdx
+    x64GPR_64("rdx", 1),
+    x64GPR_32("edx", "rdx"),
+    x64GPR_16("dx", "rdx"),
+    x64GPR_8H("dh", "rdx"),
+    x64GPR_8L("dl", "rdx"),
+    // rcx
+    x64GPR_64("rcx", 2),
+    x64GPR_32("ecx", "rcx"),
+    x64GPR_16("cx", "rcx"),
+    x64GPR_8H("ch", "rcx"),
+    x64GPR_8L("cl", "rcx"),
+    // rbx
+    x64GPR_64("rbx", 3),
+    x64GPR_32("ebx", "rbx"),
+    x64GPR_16("bx", "rbx"),
+    x64GPR_8H("bh", "rbx"),
+    x64GPR_8L("bl", "rbx"),
+    // rsi
+    x64GPR_64("rsi", 4),
+    x64GPR_32("esi", "rsi"),
+    x64GPR_16("si", "rsi"),
+    x64GPR_8L("sil", "rsi"),
+    // rdi
+    x64GPR_64("rdi", 5),
+    x64GPR_32("edi", "rdi"),
+    x64GPR_16("di", "rdi"),
+    x64GPR_8L("dil", "rdi"),
+    // rbp
+    x64GPR_64("rbp", 6),
+    x64GPR_32("ebp", "rbp"),
+    x64GPR_16("bp", "rbp"),
+    x64GPR_8L("bpl", "rbp"),
+    // rsp
+    x64GPR_64("rsp", 7),
+    x64GPR_32("esp", "rsp"),
+    x64GPR_16("sp", "rsp"),
+    x64GPR_8L("spl", "rsp"),
+    // r8
+    x64GPR_64("r8", 8),
+    x64GPR_32("r8d", "r8"),
+    x64GPR_16("r8w", "r8"),
+    x64GPR_8L("r8b", "r8"),
+    // r9
+    x64GPR_64("r9", 9),
+    x64GPR_32("r9d", "r9"),
+    x64GPR_16("r9w", "r9"),
+    x64GPR_8L("r9b", "r9"),
+    // r10
+    x64GPR_64("r10", 10),
+    x64GPR_32("r10d", "r10"),
+    x64GPR_16("r10w", "r10"),
+    x64GPR_8L("r10b", "r10"),
+    // r11
+    x64GPR_64("r11", 11),
+    x64GPR_32("r11d", "r11"),
+    x64GPR_16("r11w", "r11"),
+    x64GPR_8L("r11b", "r11"),
+    // r12
+    x64GPR_64("r12", 12),
+    x64GPR_32("r12d", "r12"),
+    x64GPR_16("r12w", "r12"),
+    x64GPR_8L("r12b", "r12"),
+    // r13
+    x64GPR_64("r13", 13),
+    x64GPR_32("r13d", "r13"),
+    x64GPR_16("r13w", "r13"),
+    x64GPR_8L("r13b", "r13"),
+    // r14
+    x64GPR_64("r14", 14),
+    x64GPR_32("r14d", "r14"),
+    x64GPR_16("r14w", "r14"),
+    x64GPR_8L("r14b", "r14"),
+    // r15
+    x64GPR_64("r15", 15),
+    x64GPR_32("r15d", "r15"),
+    x64GPR_16("r15w", "r15"),
+    x64GPR_8L("r15b", "r15"),
+    // rip
+    x64GPR_64("rip", 16),
+    // eflags
+    x64GPR_64("eflagfs", 49),
+    // es
+    x64GPR_64("es", 50),
+    // cs
+    x64GPR_64("cs", 51),
+    // ss
+    x64GPR_64("ss", 52),
+    // ds
+    x64GPR_64("ds", 53),
+    // fs
+    x64GPR_64("fs", 54),
+    // gs
+    x64GPR_64("gs", 55),
+};
+
+fn x64GPR_64(name: []const u8, dwarf_id: dwarf_id_t) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = name,
+        .dwarf_id = dwarf_id,
+        .unit = u64,
+        .r_type = .General,
+        .format = .Uint,
+    };
+}
+
+fn x64GPR_32(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = parent,
+        .dwarf_id = -1,
+        .unit = u32,
+        .r_type = .SubGeneral,
+        .format = .Uint,
+    };
+}
+
+fn x64GPR_16(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = parent,
+        .dwarf_id = -1,
+        .unit = u16,
+        .r_type = .SubGeneral,
+        .format = .Uint,
+    };
+}
+
+fn x64GPR_8H(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
+    // TODO: Increase offset of 8H by 1 byte
+
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = parent,
+        .dwarf_id = -1,
+        .unit = u8,
+        .r_type = .SubGeneral,
+        .format = .Uint,
+    };
+}
+
+fn x64GPR_8L(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = parent,
+        .dwarf_id = -1,
+        .unit = u8,
+        .r_type = .SubGeneral,
+        .format = .Uint,
+    };
+}
+
+fn x64FPR(name: []const u8, system_name: []const u8, dwarf_id: dwarf_id_t) RegisterCompilerDefinition {
+    return RegisterCompilerDefinition{
+        .name = name,
+        .super = system_name,
+        .dwarf_id = dwarf_id,
+        .unit = u16,
+        .r_type = .Float,
+        .format = .Uint,
+    };
+}
+
+const x64_UserFpRegs = extern struct {
     cwd: u16,
     swd: u16,
     ftw: u16,
@@ -25,7 +200,7 @@ const x86_64_UserFpRegs = extern struct {
     padding: [24]u32,
 };
 
-const x86_64_UserRegs = extern struct {
+const x64_UserRegs = extern struct {
     r15: u64,
     r14: u64,
     r13: u64,
@@ -70,8 +245,10 @@ pub const RegisterFormat = enum {
 };
 
 pub const RegisterCompilerDefinition = struct {
-    dwarf_id: i32,
     name: []const u8,
-    r_type: type,
+    super: []const u8,
+    dwarf_id: dwarf_id_t,
+    unit: type,
+    r_type: RegisterType,
     format: RegisterFormat,
 };
