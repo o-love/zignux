@@ -28,13 +28,8 @@ const x64_UserFpRegs = extern struct {
     padding: [24]u32,
 };
 
-test "ensure x64 regs are comptime defined" {
-    comptime {
-        std.debug
-    }
-}
 
-const x64_UserRegsDefinition: []RegisterCompilerDefinition = .{
+const x64_UserRegsDefinition = [_]RegisterCompilerDefinition{
     x64GPR_64("orig_rax", -1),
     // rax
     x64GPR_64("rax", 0),
@@ -138,6 +133,12 @@ const x64_UserRegsDefinition: []RegisterCompilerDefinition = .{
     x64GPR_64("gs", 55),
 };
 
+comptime {
+    if (x64_UserRegsDefinition.len == 0) {
+        @compileError("x64_UserRegsDefinition should not be empty");
+    }
+}
+
 fn x64GPR_64(name: []const u8, dwarf_id: dwarf_id_t) RegisterCompilerDefinition {
     return RegisterCompilerDefinition{
         .name = name,
@@ -194,6 +195,8 @@ fn x64GPR_8L(name: []const u8, parent: []const u8) RegisterCompilerDefinition {
         .format = .Uint,
     };
 }
+
+
 
 const x64_UserRegs = extern struct {
     r15: u64,
