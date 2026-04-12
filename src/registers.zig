@@ -54,4 +54,3 @@ const x64_UserRegs = extern struct {
     fs: u64,
     gs: u64,
 };
-

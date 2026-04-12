@@ -38,7 +38,13 @@ pub const PipeResult = pipesSrc.PipeResult;
 
 const ptraceSrc = @import("ptrace.zig");
 
+pub const ptrace = ptraceSrc.ptrace;
 pub const ptraceFuncs = ptraceSrc.ptraceFuncs;
+
+const registersSrc = @import("registers.zig");
+
+pub const UserRegs = registersSrc.UserRegs;
+pub const UserFpRegs = registersSrc.UserFpRegs;
 
 test {
     _ = @import("processes/base.zig");
